@@ -1,4 +1,4 @@
-# GO语言基础介绍
+# GO语言介绍
 
 ## go语言的诞生
 2007 年 9 月 20 日的下午，在谷歌山景城总部的一间办公室里，谷歌的大佬级程序员 Rob Pike在等待一个 C++ 项目构建的过程中和谷歌的另外两个大佬级程序员 Robert Griesemer和 Ken Thompson进行了一次有关设计一门新编程语言的讨论。
@@ -39,8 +39,8 @@ func main() {
 ```
 
 ## 使用go的公司
-国内:bilibili(Kratos)、bytedance(KiteX)、七牛云(goproxy.cn).
-国外:facebook、google
+国内:哔哩哔哩(Kratos)、字节跳动(KiteX)、七牛云(goproxy.cn).
+国外:google(Kubernetes)、uber(zap)、IBM(fabric,istio)
 开源项目:Docker、Kubernetes、Istio、Etcd、prometheus、influxdb、sealos
 
 ## go语言的优势
