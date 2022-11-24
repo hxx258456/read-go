@@ -149,4 +149,142 @@ OpenAPI/Swagger 规范，JSON 模式文件，协议定义文件。
 
 1. 包
 
-   建议以小写形式的单词命名
+   建议以小写形式的单个单词命名，Go语言建议，包名应尽量与包导入路径（import path）的最后一个路径分段保持一致。
+   
+   我们在给包命名的时候，不仅要考虑包自身的名字，还要兼顾该包导出的标识符（如变量、常量、类型、函数等）的命名。由于对这些包导出标识符的引用必须以包名为前缀，因此对包导出标识符命名时，在名字中不要再包含包名。比如:
+   
+   ``` go
+   strings.Reader              [good]
+   strings.StringReader        [bad]
+   strings.NewReader           [good]
+   strings.NewStringReader     [bad]
+   
+   bytes.Buffer                [good]
+   bytes.ByteBuffer            [bad]
+   bytes.NewBuffer             [good]
+   bytes.NewByteBuffer         [bad]
+   ```
+
+​    2.变量、类型、函数和方法
+
+​		循环和条件变量多采用单个字母命名；
+
+​		函数/方法的参数和返回值变量以单个单词或单个字母为主；
+
+​		由于方法在调用时会绑定类型信息，因此方法的命名以单个单词为主；
+
+​		函数多以多单词的复合词进行命名；
+
+​		类型多以多单词的复合词进行命名。
+
+
+
+## go命名建议
+
+1. 变量名成不要携带类型信息
+
+   ``` go
+   userSlice []*User         [bad]
+   users     []*User         [good]
+   ```
+
+   保持变量声明与使用之间的距离越近越好，或者在第一次使用变量之前声明该变量。
+
+2. 保持简短命名变量含以上的一致性
+
+   Go语言中有大量单字母、单个词或缩写命名的简短命名变量。有人可能会认为简短命名变量会降低代码的可读性。Go语言建议通过保持一致性来维持可读性。一致意味着代码中相同或相似的命名所传达的含义是相同或相似的，这样便于代码阅读者或维护者猜测出变量的用途。
+
+   ```go
+   // 循环语句中的变量
+   for i, v := range s { ... }           // i为下标变量; v为元素值
+   for k, v := range m { ... }           // k为key变量; v为元素值
+   for v := range r { // channel ... }   // v为元素值
+   
+   // if、switch/case分支语句中的变量
+   if v := mimeTypes[ext]; v != "" { }   // v: 元素值
+   switch v := ptr.Elem(); v.Kind() {
+       ...
+   }
+   
+   case v := <-c:                        // v: 元素值
+   
+   // 反射的结果值
+   v := reflect.ValueOf(x)
+   ```
+
+3. 常量
+
+   Go语言中，常量在命名方式上与变量并无较大差别，并不要求全部大写。只是考虑其含义的准确传递，常量多使用多单词组合的方式命名。
+
+   ``` go
+   // $GOROOT/src/net/http/request.go
+   
+   const (
+       defaultMaxMemory = 32 << 20 // 32 MB
+   )
+   
+   const (
+       deleteHostHeader = true
+       keepHostHeader   = false
+   )
+   ```
+
+   在Go中数值型常量无须显式赋予类型，常量会在使用时根据左值类型和其他运算操作数的类型进行自动转换，因此常量的名字也不要包含类型信息。
+
+   ``` go
+   // $GOROOT/src/math/sin.go
+   const (
+       PI4A = 7.85398125648498535156E-1  // 0x3fe921fb40000000,
+       PI4B = 3.77489470793079817668E-8  // 0x3e64442d00000000,
+       PI4C = 2.69515142907905952645E-15 // 0x3ce8469898cc5170,
+   )
+   
+   // $GOROOT/src/syscall/zerrors_linux_amd64.go
+   
+   // 错误码
+   const (
+       E2BIG           = Errno(0x7)
+       EACCES          = Errno(0xd)
+       EADDRINUSE      = Errno(0x62)
+       EADDRNOTAVAIL   = Errno(0x63)
+       EADV            = Errno(0x44)
+       ...
+   )
+   
+   // 信号
+   const (
+       SIGABRT   = Signal(0x6)
+       SIGALRM   = Signal(0xe)
+       SIGBUS    = Signal(0x7)
+       SIGCHLD   = Signal(0x11)
+       ...
+   )
+   ```
+
+4. 接口
+
+   Go语言中的接口是Go在编程语言层面的一个创新，它为Go代码提供了强大的解耦合能力，因此良好的接口类型设计和接口组合是Go程序设计的静态骨架和基础。良好的接口设计自然离不开良好的接口命名。在Go语言中，对于接口类型优先以单个单词命名。对于拥有唯一方法（method）或通过多个拥有唯一方法的接口组合而成的接口，Go语言的惯例是用“方法名+er”命名。
+
+   ``` go
+   // $GOROOT/src/io/io.go
+   
+   type Writer interface {
+       Write(p []byte) (n int, err error)
+   }
+   
+   type Reader interface {
+       Read(p []byte) (n int, err error)
+   }
+   
+   type Closer interface {
+       Close() error
+   }
+   
+   type ReadWriteCloser interface {
+       Reader
+       Writer
+       Closer
+   }
+   ```
+
+   
